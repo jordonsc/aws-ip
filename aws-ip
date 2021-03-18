@@ -1,0 +1,25 @@
+#!/bin/env python3
+
+import os
+import sys
+
+from aws import IpCache
+from validator import Validator
+
+
+def main():
+    local_path = os.path.dirname(os.path.realpath(__file__))
+
+    if len(sys.argv) != 2:
+        print('Syntax: ./aws-ip INPUT_FILE', file=sys.stderr)
+        sys.exit(1)
+
+    cache = IpCache("{}/data/ip-ranges.json".format(local_path))
+    cache.load()
+
+    validator = Validator(cache)
+    validator.examine(sys.argv[1])
+
+
+if __name__ == "__main__":
+    main()
